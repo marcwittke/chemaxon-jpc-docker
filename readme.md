@@ -10,7 +10,7 @@ This is my attempt to fix [the sample provided by chemaxon](https://github.com/C
 
 ### Getting started
 - download JPC 5+ Debian/Ubuntu package (`jchem-psql_<version>_amd64.deb`) from Chemaxon's [download page](https://chemaxon.com/download/jchem-suite/#jpc) (you'll need a login)
-- copy the downloaded file next to the `Dockerfile` and name it `jchem-psql_amd64.deb`
+- copy the downloaded file next to the `Dockerfile`, its name should match `jchem-*.deb`
 - copy your `license.cxl` next to the `Dockerfile`
 - build your container image: `docker build -t jpc:latest .`
 - run a container from the built image: `docker run -e POSTGRES_USER=jpcuser -e POSTGRES_PASSWORD=banana -p 5432:5432 jpc:latest`
@@ -44,6 +44,6 @@ jpcuser=# select * from test where mol |<| 'cc';
 
 ### todo's
 
-- [ ] clean shutdown. The postgres process get's killed on stop which might lead to data corruption
+- [x] clean shutdown. The postgres process get's killed on stop which might lead to data corruption
 - [ ] support volumes for data and molecule types
-- [ ] uncomment `set -Eeo pipefail` on `entrypoint.sh`. for some reason there is still a stderr output when PC start that lets the script fail
+- [x] uncomment `set -Eeo pipefail` on `entrypoint.sh`. for some reason there is still a stderr output when PC start that lets the script fail
