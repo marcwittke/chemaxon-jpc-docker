@@ -1,4 +1,5 @@
 FROM debian:buster-slim
+ENV DEBIAN_FRONTEND=noninteractive
 
 ####################################################################
 #
@@ -37,12 +38,13 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 #
 
 # installation
-COPY jchem-psql_21.1.0.r12730_amd64.deb jpc.deb
-RUN dpkg -i jpc.deb
+COPY jchem*.deb .
+RUN dpkg -i $(ls -1r jchem*.deb | head -n 1)
 
 # configuration
 COPY license.cxl /etc/chemaxon/license.cxl
 RUN chmod 666 /etc/chemaxon/license.cxl
+ENV CHEMAXON_LICENSE_URL=/etc/chemaxon/license.cxl
 
 
 ####################################################################
