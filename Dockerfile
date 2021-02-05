@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y postgresql-12 postgresql-client-12
 # configration...
 RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/12/main/pg_hba.conf
 RUN echo "listen_addresses='*'" >> /etc/postgresql/12/main/postgresql.conf
-STOPSIGNAL SIGINT
 EXPOSE 5432
 
 
@@ -38,7 +37,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 #
 
 # installation
-COPY jchem-psql_amd64.deb jpc.deb
+COPY jchem-psql_21.1.0.r12730_amd64.deb jpc.deb
 RUN dpkg -i jpc.deb
 
 # configuration
