@@ -1,19 +1,14 @@
 #!/usr/bin/env bash
 #set -Eeo pipefail
 
-echo Postgresql login is $POSTGRES_USER with password $POSTGRES_PASSWORD
-echo Java home is: $JAVA_HOME
-
 pg_start() {
-    if [ ! -f /var/lib/postgresql/12/main/PG_VERSION ] ; then
-        is_first_start=true
-	fi
-
+    echo starting postgresql...!
     /etc/init.d/postgresql start
     echo postgresql started!
 
-    if $is_first_start ; then
-        
+    role_count=`psql -At -c "SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname = '$POSTGRES_USER'"`
+
+    if [ 0 -eq ${role_count:-0} ] ; then
         echo Creating role $POSTGRES_USER
         psql -c "CREATE role $POSTGRES_USER WITH LOGIN SUPERUSER ENCRYPTED PASSWORD '$POSTGRES_PASSWORD';"
         
@@ -21,7 +16,7 @@ pg_start() {
         createdb -O $POSTGRES_USER $POSTGRES_USER
 
         echo first start done!
-    fi    
+    fi
 }
 
 jpc_pg_init() {
@@ -43,6 +38,11 @@ jpc_start() {
 }
 
 main() {
+
+    echo Postgresql login is $POSTGRES_USER with password $POSTGRES_PASSWORD
+    echo Java home is: $JAVA_HOME
+
+
     gosu postgres "$BASH_SOURCE" pg_start
 
     jpc_start
